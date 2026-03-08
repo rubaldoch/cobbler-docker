@@ -7,6 +7,7 @@ echo "[update] Rendering Cobbler configuration from templates"
 j2 --undefined /etc/cobbler/settings.yaml.j2 > /etc/cobbler/settings.yaml
 j2 --undefined /etc/cobbler/dhcp.template.j2 > /etc/cobbler/dhcp.template
 j2 --undefined /var/lib/cobbler/templates/cloud-init_user-data.j2 -o /var/lib/cobbler/templates/cloud-init_user-data
+j2 --undefined /var/lib/cobbler/templates/rocky-linux.ks.j2 -o /var/lib/cobbler/templates/rocky-linux.ks
 
 echo "[update] Configuring Cobbler default root password"
 

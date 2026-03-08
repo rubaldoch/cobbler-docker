@@ -4,16 +4,22 @@
 
 test -d isos || mkdir -p isos
 
+#####################
+#   Fedora Server   #
+#####################
 URL_FEDORA_SERVER_34="https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/34/Server/x86_64/iso/Fedora-Server-dvd-x86_64-34-1.2.iso"
 FILENAME_FEDORA_SERVER_34=$(basename $URL_FEDORA_SERVER_34)
 echo "[Download ISO & Mount] Downloading $FILENAME_FEDORA_SERVER_34"
-test -d isos/cloud-init/Fedora || mkdir -p isos/cloud-init/Fedora
-test -f isos/cloud-init/Fedora/$FILENAME_FEDORA_SERVER_34 || curl $URL_FEDORA_SERVER_34 -o isos/cloud-init/Fedora/$FILENAME_FEDORA_SERVER_34
+test -d isos/Fedora || mkdir -p isos/Fedora
+test -f isos/Fedora/$FILENAME_FEDORA_SERVER_34 || curl $URL_FEDORA_SERVER_34 -o isos/Fedora/$FILENAME_FEDORA_SERVER_34
 test -d /mnt/fedora-server-34 || sudo mkdir /mnt/fedora-server-34
 echo "[Download ISO & Mount] Mounting $FILENAME_FEDORA_SERVER_34 to /mnt/fedora-server-34"
-sudo mount -t iso9660 -o loop,ro isos/cloud-init/Fedora/$FILENAME_FEDORA_SERVER_34 /mnt/fedora-server-34
+sudo mount -t iso9660 -o loop,ro isos/Fedora/$FILENAME_FEDORA_SERVER_34 /mnt/fedora-server-34
 echo "[Download ISO & Mount] $FILENAME_FEDORA_SERVER_34 downloaded and mounted successfully"
 
+#####################
+#   Ubuntu Server   #
+#####################
 URL_UBUNTU_SERVER_2004="https://releases.ubuntu.com/focal/ubuntu-20.04.6-live-server-amd64.iso"
 FILENAME_UBUNTU_SERVER_2004=$(basename $URL_UBUNTU_SERVER_2004)
 echo "[Download ISO & Mount] Downloading $FILENAME_UBUNTU_SERVER_2004"
@@ -22,3 +28,16 @@ test -d /mnt/ubuntu-server-2004 || sudo mkdir /mnt/ubuntu-server-2004
 echo "[Download ISO & Mount] Mounting $FILENAME_UBUNTU_SERVER_2004 to /mnt/ubuntu-server-2004"
 sudo mount -t iso9660 -o loop,ro isos/cloud-init/Ubuntu20/$FILENAME_UBUNTU_SERVER_2004 /mnt/ubuntu-server-2004
 echo "[Download ISO & Mount] $FILENAME_UBUNTU_SERVER_2004 downloaded and mounted successfully"
+
+###################
+#   Rocky Linux   #
+###################
+URL_ROCKY_9="https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9.7-x86_64-dvd.iso"
+FILENAME_ROCKY_9=$(basename $URL_ROCKY_9)
+echo "[Download ISO & Mount] Downloading $FILENAME_ROCKY_9"
+test -d isos/Rocky || mkdir -p isos/Rocky
+test -f isos/Rocky/$FILENAME_ROCKY_9 || curl $URL_ROCKY_9 -o isos/Rocky/$FILENAME_ROCKY_9
+test -d /mnt/rocky-9 || sudo mkdir /mnt/rocky-9
+echo "[Download ISO & Mount] Mounting $FILENAME_ROCKY_9 to /mnt/rocky-9"
+sudo mount -t iso9660 -o loop,ro isos/Rocky/$FILENAME_ROCKY_9 /mnt/rocky-9
+echo "[Download ISO & Mount] $FILENAME_ROCKY_9 downloaded and mounted successfully"

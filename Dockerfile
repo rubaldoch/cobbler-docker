@@ -13,7 +13,13 @@ ENV COBBLER_SERVER_HOST=127.0.0.1 \
     COBBLER_DHCP_RANGE="192.168.10.50 192.168.10.100" \
     COBBLER_PROXY_URL_EXT= \
     COBBLER_PROXY_URL_INT= \
-    COBBLER_ETH_INTERFACE=eth0
+    COBBLER_MANAGE_DHCP="true" \
+    COBBLER_MANAGE_DHCP_V4="true" \
+    COBBLER_PXE_JUST_ONE="true" \
+    COBBLER_ENABLE_IPXE="true" \
+    COBBLER_DEFAULT_USERNAME= \
+    COBBLER_DEFAULT_SSH_KEY= \
+    TZ=America/New_York
 
 RUN dnf makecache
 
@@ -103,6 +109,7 @@ RUN git clone ${COBBLER_GIT_URL} /tmp/cobbler && \
 # Symlink undionly.kpxe to Cobbler TFTP loaders directory for iPXE support
 RUN ln -s /usr/share/ipxe/undionly.kpxe /var/lib/cobbler/loaders/undionly.kpxe
 
+# Remove default SSL config to avoid conflicts with Cobbler's SSL setup
 RUN rm -f /etc/httpd/conf.d/ssl.conf 
 
 # Create directory for cloud-init ISOs
