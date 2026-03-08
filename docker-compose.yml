@@ -5,14 +5,14 @@ services:
       context: .
     environment:
       TZ: America/Sao_Paulo
-      COBBLER_SERVER_HOST: 192.168.122.1
-      COBBLER_NEXT_SERVER_HOST: 192.168.122.1
-      COBBLER_SUBNET: 192.168.122.0
+      COBBLER_SERVER_HOST: 10.17.3.1
+      COBBLER_NEXT_SERVER_HOST: 10.17.3.1
+      COBBLER_SUBNET: 10.17.3.0
       COBBLER_NETMASK: 255.255.255.0
-      COBBLER_ROUTERS: 192.168.122.1
+      COBBLER_ROUTERS: 10.17.3.1
       COBBLER_NAMESERVERS: 1.1.1.1,8.8.8.8
-      COBBLER_DHCP_RANGE: 192.168.122.50 192.168.122.100
-      COBBLER_ETH_INTERFACE: virbr0
+      COBBLER_DHCP_RANGE: 10.17.3.50 10.17.3.100
+      COBBLER_ETH_INTERFACE: virbr2
       COBBLER_PXE_JUST_ONE: "true"
       COBBLER_ENABLE_IPXE: "true"
     secrets:
@@ -21,8 +21,6 @@ services:
       - NET_ADMIN
     network_mode: host
     volumes:
-      # - 'cobbler_repo:/srv'
-      # - 'cobbler_var:/var/lib/cobbler'
       - /mnt:/mnt
 
 secrets:
