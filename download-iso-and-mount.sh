@@ -29,6 +29,24 @@ echo "[Download ISO & Mount] Mounting $FILENAME_UBUNTU_SERVER_2004 to /mnt/ubunt
 sudo mount -t iso9660 -o loop,ro isos/cloud-init/Ubuntu20/$FILENAME_UBUNTU_SERVER_2004 /mnt/ubuntu-server-2004
 echo "[Download ISO & Mount] $FILENAME_UBUNTU_SERVER_2004 downloaded and mounted successfully"
 
+URL_UBUNTU_SERVER_2204="https://releases.ubuntu.com/jammy/ubuntu-22.04.5-live-server-amd64.iso"
+FILENAME_UBUNTU_SERVER_2204=$(basename $URL_UBUNTU_SERVER_2204)
+echo "[Download ISO & Mount] Downloading $FILENAME_UBUNTU_SERVER_2204"
+test -f isos/cloud-init/Ubuntu22/$FILENAME_UBUNTU_SERVER_2204 || curl $URL_UBUNTU_SERVER_2204 -o isos/cloud-init/Ubuntu22/$FILENAME_UBUNTU_SERVER_2204
+test -d /mnt/ubuntu-server-2204 || sudo mkdir /mnt/ubuntu-server-2204
+echo "[Download ISO & Mount] Mounting $FILENAME_UBUNTU_SERVER_2204 to /mnt/ubuntu-server-2204"
+sudo mount -t iso9660 -o loop,ro isos/cloud-init/Ubuntu22/$FILENAME_UBUNTU_SERVER_2204 /mnt/ubuntu-server-2204
+echo "[Download ISO & Mount] $FILENAME_UBUNTU_SERVER_2204 downloaded and mounted successfully"
+
+URL_UBUNTU_SERVER_2404="https://releases.ubuntu.com/noble/ubuntu-24.04.4-live-server-amd64.iso"
+FILENAME_UBUNTU_SERVER_2404=$(basename $URL_UBUNTU_SERVER_2404)
+echo "[Download ISO & Mount] Downloading $FILENAME_UBUNTU_SERVER_2404"
+test -f isos/cloud-init/Ubuntu24/$FILENAME_UBUNTU_SERVER_2404 || curl $URL_UBUNTU_SERVER_2404 -o isos/cloud-init/Ubuntu24/$FILENAME_UBUNTU_SERVER_2404
+test -d /mnt/ubuntu-server-2404 || sudo mkdir /mnt/ubuntu-server-2404
+echo "[Download ISO & Mount] Mounting $FILENAME_UBUNTU_SERVER_2404 to /mnt/ubuntu-server-2404"
+sudo mount -t iso9660 -o loop,ro isos/cloud-init/Ubuntu24/$FILENAME_UBUNTU_SERVER_2404 /mnt/ubuntu-server-2404
+echo "[Download ISO & Mount] $FILENAME_UBUNTU_SERVER_2404 downloaded and mounted successfully"
+
 ###################
 #   Rocky Linux   #
 ###################
@@ -41,3 +59,13 @@ test -d /mnt/rocky-9 || sudo mkdir /mnt/rocky-9
 echo "[Download ISO & Mount] Mounting $FILENAME_ROCKY_9 to /mnt/rocky-9"
 sudo mount -t iso9660 -o loop,ro isos/Rocky/$FILENAME_ROCKY_9 /mnt/rocky-9
 echo "[Download ISO & Mount] $FILENAME_ROCKY_9 downloaded and mounted successfully"
+
+URL_ROCKY_10="https://download.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10.1-x86_64-dvd1.iso"
+FILENAME_ROCKY_10=$(basename $URL_ROCKY_10)
+echo "[Download ISO & Mount] Downloading $FILENAME_ROCKY_10"
+test -d isos/Rocky || mkdir -p isos/Rocky
+test -f isos/Rocky/$FILENAME_ROCKY_10 || curl $URL_ROCKY_10 -o isos/Rocky/$FILENAME_ROCKY_10
+test -d /mnt/rocky-10 || sudo mkdir /mnt/rocky-10
+echo "[Download ISO & Mount] Mounting $FILENAME_ROCKY_10 to /mnt/rocky-10"
+sudo mount -t iso9660 -o loop,ro isos/Rocky/$FILENAME_ROCKY_10 /mnt/rocky-10
+echo "[Download ISO & Mount] $FILENAME_ROCKY_10 downloaded and mounted successfully"

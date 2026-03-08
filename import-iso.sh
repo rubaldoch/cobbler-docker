@@ -44,6 +44,35 @@ if [[ $? -eq 0 ]]; then
     done
 fi
 
+PROFILE_NAME="Ubuntu-Server-2204"
+echo "[Import ISO] Importing "$PROFILE_NAME""
+cobbler import --name="$PROFILE_NAME"  --path /mnt/ubuntu-server-2204 --arch=x86_64
+cp -r /isos/cloud-init/Ubuntu22/ /var/www/cobbler/pub/cloud-init/Ubuntu22/
+if [[ $? -eq 0 ]]; then
+    for PROFILE in $(cobbler profile list | grep "$PROFILE_NAME");do
+        echo "[Import ISO] Updating kernel options for Ubuntu 22.04 profile to support autoinstall with cloud-init"
+        cobbler profile edit \
+                --name ${PROFILE}  \
+                --autoinstall cloud-init_user-data \
+                --kernel-options "root=/dev/ram0 ramdisk_size=1500000 ip=dhcp url=http://${COBBLER_SERVER_HOST}/cblr/pub/cloud-init/Ubuntu22/ubuntu-22.04.5-live-server-amd64.iso autoinstall cloud-config-url=http://${COBBLER_SERVER_HOST}/cblr/svc/op/autoinstall/profile/$PROFILE"
+        echo "[Import ISO] Profile $PROFILE updated successfully"
+    done
+fi
+
+PROFILE_NAME="Ubuntu-Server-2404"
+echo "[Import ISO] Importing "$PROFILE_NAME""
+cobbler import --name="$PROFILE_NAME"  --path /mnt/ubuntu-server-2404 --arch=x86_64
+cp -r /isos/cloud-init/Ubuntu24/ /var/www/cobbler/pub/cloud-init/Ubuntu24/
+if [[ $? -eq 0 ]]; then
+    for PROFILE in $(cobbler profile list | grep "$PROFILE_NAME");do
+        echo "[Import ISO] Updating kernel options for Ubuntu 24.04 profile to support autoinstall with cloud-init"
+        cobbler profile edit \
+                --name ${PROFILE}  \
+                --autoinstall cloud-init_user-data \
+                --kernel-options "root=/dev/ram0 ramdisk_size=1500000 ip=dhcp url=http://${COBBLER_SERVER_HOST}/cblr/pub/cloud-init/Ubuntu24/ubuntu-24.04.4-live-server-amd64.iso autoinstall cloud-config-url=http://${COBBLER_SERVER_HOST}/cblr/svc/op/autoinstall/profile/$PROFILE"
+        echo "[Import ISO] Profile $PROFILE updated successfully"
+    done
+fi
 
 ###################
 #   Rocky Linux   #
@@ -52,6 +81,19 @@ fi
 PROFILE_NAME="Rocky-9.7-Base"
 echo "[Import ISO] Importing "$PROFILE_NAME""
 cobbler import --name="$PROFILE_NAME"  --path /mnt/rocky-9 --arch=x86_64
+if [[ $? -eq 0 ]]; then
+    for PROFILE in $(cobbler profile list | grep "$PROFILE_NAME");do
+        echo "[Import ISO] Creating generic ks file for $PROFILE"
+        cat /var/lib/cobbler/templates/rocky-linux.ks | sed 's,selinux --disabled,selinux --permissive,' | tee /var/lib/cobbler/templates/${PROFILE}.ks
+        echo "[Import ISO] Updating profile $PROFILE"
+        cobbler profile edit --name ${PROFILE} --autoinstall ${PROFILE}.ks
+        echo "[Import ISO] Profile $PROFILE updated successfully"
+    done
+fi
+
+PROFILE_NAME="Rocky-10.1-Base"
+echo "[Import ISO] Importing "$PROFILE_NAME""
+cobbler import --name="$PROFILE_NAME"  --path /mnt/rocky-10 --arch=x86_64
 if [[ $? -eq 0 ]]; then
     for PROFILE in $(cobbler profile list | grep "$PROFILE_NAME");do
         echo "[Import ISO] Creating generic ks file for $PROFILE"
