@@ -4,22 +4,8 @@ services:
     container_name: cobbler-3.7
     build:
       context: .
-    environment:
-      TZ: America/Sao_Paulo
-      COBBLER_SERVER_HOST: 10.17.3.1
-      COBBLER_NEXT_SERVER_HOST: 10.17.3.1
-      COBBLER_SUBNET: 10.17.3.0
-      COBBLER_NETMASK: 255.255.255.0
-      COBBLER_ROUTERS: 10.17.3.1
-      COBBLER_NAMESERVERS: 1.1.1.1,8.8.8.8
-      COBBLER_DHCP_RANGE: 10.17.3.50 10.17.3.100
-      COBBLER_ETH_INTERFACE: virbr2
-      COBBLER_PXE_JUST_ONE: "true"
-      COBBLER_ENABLE_IPXE: "true"
-      COBBLER_MANAGE_DHCP: "true"
-      COBBLER_MANAGE_DHCP_V4: "true"
-      COBBLER_DEFAULT_USERNAME: "support"
-      COBBLER_DEFAULT_SSH_KEY: ""
+    env_file:
+      - .env
     secrets:
       - cobbler_root_password
     cap_add:
