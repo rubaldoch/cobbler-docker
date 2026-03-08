@@ -6,7 +6,7 @@ echo "[update] Rendering Cobbler configuration from templates"
 # Render templates (fail if variables are missing)
 j2 --undefined /etc/cobbler/settings.yaml.j2 > /etc/cobbler/settings.yaml
 j2 --undefined /etc/cobbler/dhcp.template.j2 > /etc/cobbler/dhcp.template
-
+j2 --undefined /var/lib/cobbler/templates/cloud-init_user-data.j2 -o /var/lib/cobbler/templates/cloud-init_user-data
 
 echo "[update] Configuring Cobbler default root password"
 
@@ -40,12 +40,12 @@ echo "[update] Cobbler root password configured successfully"
 
 echo "[update] Cobbler enable DHCP management"
 
-# sed -i \
-#   "s|^manage_dhcp:.*|manage_dhcp: true|" \
-#   /etc/cobbler/settings.yaml
-# sed -i \
-#   "s|^manage_dhcp_v4:.*|manage_dhcp_v4: true|" \
-#   /etc/cobbler/settings.yaml
+sed -i \
+  "s|^manage_dhcp:.*|manage_dhcp: $COBBLER_MANAGE_DHCP|" \
+  /etc/cobbler/settings.yaml
+sed -i \
+  "s|^manage_dhcp_v4:.*|manage_dhcp_v4: $COBBLER_MANAGE_DHCP_V4|" \
+  /etc/cobbler/settings.yaml
 sed -i \
   "s|^pxe_just_once:.*|pxe_just_once: "$COBBLER_PXE_JUST_ONE"|" \
   /etc/cobbler/settings.yaml
@@ -54,3 +54,27 @@ sed -i \
   /etc/cobbler/settings.yaml
 
 echo "[update] Cobbler configuration update completed successfully"
+
+echo "[update] Applying new Cobbler configurations"
+if pgrep -x "supervisord" > /dev/null; then
+    echo "[update] supervisord is running, restarting cobblerd to apply new configs..."
+    supervisorctl start cobblerd
+    cobbler sync
+
+    echo "[update] Creating GRUB2 EFI bootloaders..."
+    cobbler mkloaders
+
+    # # Commented because the signature file is provided by the container.
+    # # The official signature file doesn't include signatures for new OS
+    # # versions
+    # cobbler signature update
+    # echo "[update] Restarting cobblerd service to apply new signatures..."
+    # supervisorctl restart cobblerd
+    # cobbler sync
+
+    cobbler check
+    echo "[update] Cobbler configuration applied successfully"
+else
+    echo "[update] supervisord is not running, skipping service restarts..."
+fi
+

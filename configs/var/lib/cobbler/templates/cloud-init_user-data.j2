@@ -1,0 +1,46 @@
+#cloud-config
+autoinstall:
+  version: 1
+  apt:
+    preserve_sources_list: true
+    primary:
+    - arches: [amd64, i386]
+      uri: http://$http_server/cblr/links/$distro
+    - arches: [default]
+      uri: http://$http_server/cblr/links/$distro
+    fallback: offline-install
+  identity:
+$SNIPPET('cloud-init_hostname')
+    password: $default_password_crypted
+    realname: {{COBBLER_DEFAULT_USERNAME}}
+    username: {{COBBLER_DEFAULT_USERNAME}}
+  kernel:
+    package: linux-generic
+  keyboard:
+    layout: us
+    toggle: null
+    variant: ''
+  locale: en_US.UTF-8
+$SNIPPET('cloud-init_network')
+  ssh:
+    allow-pw: true
+    install-server: true
+    {% if COBBLER_DEFAULT_SSH_KEY is defined and COBBLER_DEFAULT_SSH_KEY|trim != "" %}
+    authorized-keys:
+      - {{COBBLER_DEFAULT_SSH_KEY}}
+    {% endif %}
+  storage:
+    layout:
+      name: lvm
+      sizing-policy: all
+  package_update: false
+  package_upgrade: false
+  late-commands:
+## Figure out if we're automating OS installation for a system or a profile
+#if $getVar('system_name','') != ''
+#set $what = "system"
+#else
+#set $what = "profile"
+#end if
+    - wget -O /target/tmp/autoinstall-user-data.yaml http://$http_server/cblr/svc/op/autoinstall/$what/$name
+    - chroot /target /bin/bash -s ssh-keygen -t rsa -b 2048 -m ssh2 -N "" -f /root/.ssh/id_rsa

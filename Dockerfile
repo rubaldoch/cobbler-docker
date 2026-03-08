@@ -103,12 +103,14 @@ RUN git clone ${COBBLER_GIT_URL} /tmp/cobbler && \
 # Symlink undionly.kpxe to Cobbler TFTP loaders directory for iPXE support
 RUN ln -s /usr/share/ipxe/undionly.kpxe /var/lib/cobbler/loaders/undionly.kpxe
 
-RUN rm -f /etc/httpd/conf.d/ssl.conf
+RUN rm -f /etc/httpd/conf.d/ssl.conf 
+
+# Create directory for cloud-init ISOs
+RUN mkdir -p /var/www/cobbler/pub/cloud-init/
 
 # Configs & scripts
 COPY configs/ /
 
 EXPOSE 80 443 69/udp
-
 
 ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
