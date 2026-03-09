@@ -76,8 +76,8 @@ Then edit the `.env` file and adjust the values according to your environment.
 Store the Cobbler root password in a file that will be used as a Docker secret.
 
 ```bash
-echo -n "your_secure_password" > secret/cobbler_root_password.txt
-chmod 600 secret/cobbler_root_password.txt
+echo -n "your_secure_password" > secrets/cobbler_root_password.txt
+chmod 600 secrets/cobbler_root_password.txt
 ```
 
 Ensure the file permissions are restricted so that only the owner can read it.
