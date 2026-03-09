@@ -95,7 +95,9 @@ RUN dnf install -y          \
 # Utilities
 RUN dnf install -y          \
     vim                     \
-    net-tools            && \
+    iputils                 \
+    iproute                 \
+    net-tools            && \          
     pip3 install --no-cache-dir j2cli[yaml]
     
 

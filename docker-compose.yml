@@ -8,14 +8,24 @@ services:
       - .env
     secrets:
       - cobbler_root_password
-    cap_add:
-      - NET_ADMIN
-    network_mode: host
     volumes:
       - cobbler_data:/var/lib/cobbler
       - cobbler_www:/var/www/cobbler
       - ./isos:/isos
       - /mnt:/mnt:rshared
+    networks:
+      macvlan_net:
+        ipv4_address: ${COBBLER_SERVER_HOST}
+
+networks:
+  macvlan_net:
+    driver: macvlan
+    driver_opts:
+      parent: enp4s0
+    ipam:
+      config:
+        - subnet: ${COBBLER_SUBNET}/${COBBLER_NETMASK_CDIR}
+          gateway: ${COBBLER_ROUTERS}
 
 secrets:
   cobbler_root_password:
